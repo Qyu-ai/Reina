@@ -45,7 +45,8 @@ class SparkTLearner:
         data (2-D Spark dataframe): Base dataset containing features, treatment, iv, and outcome variables
         treatments (List): Names of the treatment variables             
         outcome (Str): Name of the outcome variable
-        estimator_0 (sklearn model obj): Name of the instrument variable
+        estimator_0 (mllib model obj): Arbitrary ML model of choice
+        estimator_1 (mllib model obj): Arbitrary ML model of choice
               
         Returns
         ------

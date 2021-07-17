@@ -48,11 +48,11 @@ class SparkXLearner:
         data (2-D Spark dataframe): Base dataset containing features, treatment, iv, and outcome variables
         treatments (List): Names of the treatment variables             
         outcome (Str): Name of the outcome variable
-        estimator_10 (sklearn model obj): Arbitrary ML model of choice
-        estimator_11 (sklearn model obj): Arbitrary ML model of choice
-        estimator_20 (sklearn model obj): Arbitrary ML model of choice
-        estimator_21 (sklearn model obj): Arbitrary ML model of choice
-        propensity_estimator (sklearn model obj): Arbitrary ML model for propensity function
+        estimator_10 (mllib model obj): Arbitrary ML model of choice
+        estimator_11 (mllib model obj): Arbitrary ML model of choice
+        estimator_20 (mllib model obj): Arbitrary ML model of choice
+        estimator_21 (mllib model obj): Arbitrary ML model of choice
+        propensity_estimator (mllib model obj): Arbitrary ML model for propensity function
         
         Returns
         ------
