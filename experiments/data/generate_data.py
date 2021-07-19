@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[14]:
-
+# REFERENCE: this code snippet is taken from one of Econml's example notebooks.
+# TODO: change this to an easier script or a smaller example dataset (e.g., grad admission rate prediction on kaggle)
 
 # Helper imports 
 import numpy as np
