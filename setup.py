@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="reina",
-    version="0.0.4",
+    version="0.0.5",
     author="Qyu.ai Inc.",
     author_email="soumil@qyu.ai",
     description="A Causal Inference library for Big Data.",
