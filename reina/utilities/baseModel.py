@@ -1,7 +1,7 @@
 """
 Returns ML models from the MLLib library.
 """
-
+import pyspark
 from pyspark.ml.regression import LinearRegression
 from pyspark.ml.regression import DecisionTreeRegressor
 from pyspark.ml.regression import RandomForestRegressor

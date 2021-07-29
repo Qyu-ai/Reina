@@ -1,11 +1,11 @@
-import setuptools
+from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-setuptools.setup(
+setup(
     name="reina",
-    version="0.0.1",
+    version="0.0.4",
     author="Qyu.ai Inc.",
     author_email="soumil@qyu.ai",
     description="A Causal Inference library for Big Data.",
@@ -20,21 +20,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "reina"},
-    packages=setuptools.find_packages(where="reina"),
+    packages=find_packages(),
     python_requires=">=3.6",
-    install_requires=['py4j==0.10.9.2', 'pyspark'],
-    extras_require={
-        'ml': ['numpy>=1.7'],
-        'mllib': ['numpy>=1.7'],
-        'sql': [
-            'pandas>=0.23.2',
-            'pyarrow>=1.0.0',
-        ],
-        'pandas_on_spark': [
-            'pandas>=0.23.2',
-            'pyarrow>=1.0.0',
-            'numpy>=1.14',
-        ],
-    }
+    install_requires=['py4j>=0.10.9', 'numpy>=1.7', 'pandas>=0.23.2', 'pyarrow>=1.0.0', 'pyspark']
 )

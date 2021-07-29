@@ -7,7 +7,7 @@
 """
 Provides a spark-based two-stage least squares treatment effect estimator.
 """
-
+import pyspark
 from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.ml.feature import VectorAssembler
 from pyspark.sql.functions import avg
@@ -16,7 +16,7 @@ from pyspark.sql.functions import when
 from pyspark.sql import SparkSession
 from pyspark.ml.regression import LinearRegression
 
-class SparkSieveTSLS:
+class SieveTSLS:
     """
     Spark-based two-stage least squared heterogeneous treatment effect estimator.
     

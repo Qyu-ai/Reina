@@ -7,7 +7,7 @@
 """
 Provides a spark-based X-learner heterogeneous treatment effect estimator.
 """
-
+import pyspark
 from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.ml.feature import VectorAssembler
 from pyspark.sql.functions import avg
@@ -18,7 +18,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf
 from pyspark.sql.types import FloatType
     
-class SparkXLearner:
+class XLearner:
     """
     Spark-based X-learner heterogeneous treatment effect estimator.
 
