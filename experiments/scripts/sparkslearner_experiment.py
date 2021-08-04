@@ -7,7 +7,8 @@ from pyspark.sql.functions import when
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf
 from pyspark.sql.types import FloatType
-    
+from pyspark.ml.regression import RandomForestRegressor
+
 class SparkSLearner:
     """
     Spark-based S-learner heterogeneous treatment effect estimator.
@@ -48,7 +49,7 @@ class SparkSLearner:
         self.covariates = [var for var in data.columns if var not in treatments and var != outcome]
         self.estimator = estimator
         self.__fit(data)
-​
+
     def effects(self, X, treatment):
         """
         Function to get the estimated heterogeneous treatment effect from the fitted counterfactual model.
@@ -77,15 +78,15 @@ class SparkSLearner:
         counterfactual_control_assembled = assembler.transform(counterfactual_control).select("features")
         prediction_1 = self.estimator.transform(counterfactual_treatment_assembled).withColumnRenamed("prediction", "prediction_1").select("prediction_1")
         prediction_0 = self.estimator.transform(counterfactual_control_assembled).withColumnRenamed("prediction", "prediction_0").select("prediction_0")
-​
+
         # Get cate
         X_w_pred = self.__mergeDfCol(X, prediction_1)
         X_w_pred = self.__mergeDfCol(X_w_pred, prediction_0)
-        self.cate[treatment] = X_w_pred.select(X_w_pred.prediction_1 - X_w_pred.prediction_0).withColumnRenamed("(prediction_1 - prediction_0)", "cate")
-        self.average_treatment_effects[treatment] = float(self.cate[treatment].groupby().avg().head()[0])
+        cate = X_w_pred.select(X_w_pred.prediction_1 - X_w_pred.prediction_0).withColumnRenamed("(prediction_1 - prediction_0)", "cate")
+        ate = float(cate.groupby().avg().head()[0])
             
         return cate, ate
-​
+
     def __fit(self, data):
         for treatment in self.treatments:
             
@@ -111,17 +112,17 @@ class SparkSLearner:
         
         df_1 = df_1.withColumn("COL_MERGE_ID", monotonically_increasing_id())
         df_2 = df_2.withColumn("COL_MERGE_ID", monotonically_increasing_id())
-        df_3 = df_2.join(df1, "COL_MERGE_ID").drop("COL_MERGE_ID")
+        df_3 = df_2.join(df_1, "COL_MERGE_ID").drop("COL_MERGE_ID")
         return df_3
 
-def baseModel(model="LinearRegression", labelCol="label", model_options={}):
+def baseModel(model="LinearRegressor", labelCol="label", model_options={}):
     
-    if model == "LinearRegression":
+    if model == "LinearRegressor":
         return LinearRegression(featuresCol="features", labelCol=labelCol, **model_options) 
     elif model == "DecisionTreeRegressor":
         return DecisionTreeRegressor(featuresCol="features", labelCol=labelCol, **model_options)
     elif model == "RandomForestRegressor":
-        return RandomForstRegressor(featuresCol="features", labelCol=labelCol, **model_options)
+        return RandomForestRegressor(featuresCol="features", labelCol=labelCol, **model_options)
     elif model == "GradientBoostedTreeRegressor":
         return GBTRegressor(featuresCol="features", labelCol=labelCol, **model_options)
     elif model == "LogisticRegression":
@@ -137,12 +138,15 @@ def baseModel(model="LinearRegression", labelCol="label", model_options={}):
     elif model == "LinearSVM":
         return LinearSVC(featuresCol="features", labelCol=labelCol, **model_options)
 
+
+spark = SparkSession.builder.appName('metalearner-benchmark').getOrCreate()
+
 # Note: This notebook assumes that the test_data.csv is already stored in hdfs
 # Read generated toy data from Hadoop HDFS
 df = (spark.read
           .format("csv")
           .option('header', 'true')
-          .load("/test_data.csv"))
+          .load("s3://2sls-spark/reina-spark/generated_50m.csv"))
 df = df.withColumn("var1", df.var1.cast("float"))
 df = df.withColumn("var2", df.var2.cast("float"))
 df = df.withColumn("var3", df.var3.cast("float"))
@@ -155,7 +159,7 @@ df = df.drop("_c0")
 # Set up necessary parameters
 treatments = ['treatment']
 outcome = 'outcome'
-estimator = RandomForestRegressor()
+estimator = baseModel(model="RandomForestRegressor", labelCol=outcome)
 
 # Fit S-learner
 spark_slearner = SparkSLearner()
@@ -164,7 +168,7 @@ import timeit
 start = timeit.default_timer()
 spark_slearner.fit(data=df, treatments=treatments, outcome=outcome, estimator=estimator)
 stop = timeit.default_timer()
-_, ate = spark_slearner.effect()
-print('========================================== S-learner Time (Spark): ', stop - start)  
-print("========================================== S-learner ATE:", ate)
+_, ate = spark_slearner.effects(X=df, treatment=treatments[0])
+print('============================================================================= S-learner Time (Spark): ', stop - start)  
+print("============================================================================= S-learner ATE:", ate)
 
