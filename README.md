@@ -7,7 +7,7 @@ ReInA (Reasoning In AI) is a causal inference platform aimed at estimating heter
     $ pip install reina
     
 ## Quick Start
-    from reina
+    import reina
     from pyspark.sql import SparkSession
 
     # Initialize spark session
@@ -26,7 +26,7 @@ ReInA (Reasoning In AI) is a causal inference platform aimed at estimating heter
     outcome = 'name_of_outcome'
     
     # Setup and fit model
-    causal_model = reina.IvMethods.TSLS.SparkSieveTSLS(data=data, treatment=treatment, outcome=outcome)
+    causal_model = reina.iv.TwoStageLeastSquares(data=data, treatment=treatment, outcome=outcome)
     causal_model.fit(data=data, treatments=treatment, outcome=outcome,...)
     
     # Get heterogeneous treatment effect
