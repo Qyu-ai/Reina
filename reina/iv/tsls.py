@@ -16,7 +16,7 @@ from pyspark.sql.functions import when
 from pyspark.sql import SparkSession
 from pyspark.ml.regression import LinearRegression
 
-class SieveTSLS:
+class TwoStageLeastSquares:
     """
     Spark-based two-stage least squared heterogeneous treatment effect estimator.
     
