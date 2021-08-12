@@ -21,7 +21,6 @@ from pyspark.sql.types import FloatType
 class XLearner:
     """
     Spark-based X-learner heterogeneous treatment effect estimator.
-
     Assumptions
     ---------------
     This class assumes that the data is already stored in a distributed storage system (e.g., HDFS).
@@ -91,14 +90,14 @@ class XLearner:
         # Final prediction
         assembler = VectorAssembler(inputCols=self.covariates+[treatment], outputCol='features')
         X_assembled = assembler.transform(X)
-        prediction_21 = estimator_21.transform(X_assembled.select('features')).withColumnRenamed("prediction", "prediction_21").select("prediction_21")
-        prediction_20 = estimator_20.transform(X_assembled.select('features')).withColumnRenamed("prediction", "prediction_20").select("prediction_20")
+        prediction_21 = self.estimator_21.transform(X_assembled.select('features')).withColumnRenamed("prediction", "prediction_21").select("prediction_21")
+        prediction_20 = self.estimator_20.transform(X_assembled.select('features')).withColumnRenamed("prediction", "prediction_20").select("prediction_20")
 
         # Propensity function
         propensity_assembler = VectorAssembler(inputCols=self.covariates, outputCol='features')
         treatment_group_prop = propensity_assembler.transform(X)
         treatment_group_prop = treatment_group_prop.select(['features', treatment])
-        treatment_prob = propensity_estimator.transform(treatment_group_prop).select("probability")
+        treatment_prob = self.propensity_estimator.transform(treatment_group_prop).select("probability")
         firstelement = udf(lambda v:float(v[1]),FloatType())
         treatment_prob = treatment_prob.select(firstelement('probability')).withColumnRenamed("<lambda>(probability)", "probability")
 
@@ -109,8 +108,8 @@ class XLearner:
         X_w_pred = X_w_pred.withColumn("probability", X_w_pred.probability.cast("float"))
         
         # should be + but - seems to produce the correct results...
-        self.cate[treatment] = X_w_pred.select((X_w_pred.probability * X_w_pred.prediction_21) - ((lit(1) - X_w_pred.probability) * X_w_pred.prediction_20)).withColumnRenamed("((probability * prediction_21) + ((1 - probability) * prediction_20))", "cate")
-        self.average_treatment_effects[treatment] = float(self.cate[treatment].groupby().avg().head()[0])
+        cate = X_w_pred.select((X_w_pred.probability * X_w_pred.prediction_21) - ((lit(1) - X_w_pred.probability) * X_w_pred.prediction_20)).withColumnRenamed("((probability * prediction_21) + ((1 - probability) * prediction_20))", "cate")
+        ate = float(cate.groupby().avg().head()[0])
             
         return cate, ate
 
@@ -139,8 +138,8 @@ class XLearner:
             
             # Second stage
             # Get imputed counterfactuals
-            counterfactual_control = estimator_11.transform(control_group_assembled.select('features')).withColumnRenamed("prediction", "prediction_10").select("prediction_10")
-            counterfactual_treatment = estimator_10.transform(treatment_group_assembled.select('features')).withColumnRenamed("prediction", "prediction_11").select("prediction_11")
+            counterfactual_control = self.estimator_11.transform(control_group_assembled.select('features')).withColumnRenamed("prediction", "prediction_10").select("prediction_10")
+            counterfactual_treatment = self.estimator_10.transform(treatment_group_assembled.select('features')).withColumnRenamed("prediction", "prediction_11").select("prediction_11")
             
             # Get imputed treatment effect
             # TODO: df.select(self.outcome) doesn't seem to work here for some reason...let's fix the label column as "label" for now when inputting
@@ -160,7 +159,7 @@ class XLearner:
             treatment_group_prop = assembler_propensity.transform(data)
             treatment_group_prop = treatment_group_prop.select(['features', treatment])
             self.propensity_estimator = self.propensity_estimator.fit(treatment_group_prop)
-            treatment_prob = propensity_estimator.transform(treatment_group_prop).select("probability")
+            treatment_prob = self.propensity_estimator.transform(treatment_group_prop).select("probability")
             firstelement=udf(lambda v:float(v[1]),FloatType())
             treatment_prob = treatment_prob.select(firstelement('probability')).withColumnRenamed("<lambda>(probability)", "probability")
             
@@ -181,6 +180,6 @@ class XLearner:
         
         df_1 = df_1.withColumn("COL_MERGE_ID", monotonically_increasing_id())
         df_2 = df_2.withColumn("COL_MERGE_ID", monotonically_increasing_id())
-        df_3 = df_2.join(df1, "COL_MERGE_ID").drop("COL_MERGE_ID")
+        df_3 = df_2.join(df_1, "COL_MERGE_ID").drop("COL_MERGE_ID")
         return df_3
 

@@ -21,7 +21,6 @@ from pyspark.sql.types import FloatType
 class TLearner:
     """
     Spark-based T-learner heterogeneous treatment effect estimator.
-
     Assumptions
     ---------------
     This class assumes that the data is already stored in a distributed storage system (e.g., HDFS).
@@ -58,7 +57,7 @@ class TLearner:
         self.covariates = [var for var in data.columns if var not in treatments and var != outcome]
         self.estimator_0 = estimator_0
         self.estimator_1 = estimator_1
-        self.__fit(data)
+        self.__fit(data, estimator_0, estimator_1)
             
     def effects(self, X, treatment):
         """
@@ -83,18 +82,17 @@ class TLearner:
         # Ger predictions for treatment and control group
         assembler = VectorAssembler(inputCols=self.covariates+[treatment], outputCol='features')
         X_assembled = assembler.transform(X)
-        prediction_1 = estimator_1.transform(X_assembled.select('features')).withColumnRenamed("prediction", "prediction_1").select("prediction_1")
-        prediction_0 = estimator_0.transform(X_assembled.select('features')).withColumnRenamed("prediction", "prediction_0").select("prediction_0")
+        prediction_1 = self. estimator_1.transform(X_assembled.select('features')).withColumnRenamed("prediction", "prediction_1").select("prediction_1")
+        prediction_0 = self.estimator_0.transform(X_assembled.select('features')).withColumnRenamed("prediction", "prediction_0").select("prediction_0")
 
         # Get Cate
         X_w_pred = self.__mergeDfCol(X, prediction_1)
         X_w_pred = self.__mergeDfCol(X_w_pred, prediction_0)
-        self.cate[treatment] = X_w_pred.select(X_w_pred.prediction_1 - X_w_pred.prediction_0).withColumnRenamed("(prediction_1 - prediction_0)", "cate")
-        self.average_treatment_effects[treatment] = float(self.cate[treatment].groupby().avg().head()[0])
+        cate = X_w_pred.select(X_w_pred.prediction_1 - X_w_pred.prediction_0).withColumnRenamed("(prediction_1 - prediction_0)", "cate")
+        ate = float(cate.groupby().avg().head()[0])
         return cate, ate
 
-    
-    def __fit(self, data, estimator_1, estimator_0):
+    def __fit(self, data, estimator_0, estimator_1):
         for treatment in self.treatments:
             
             # Set up assembler
@@ -128,6 +126,6 @@ class TLearner:
         
         df_1 = df_1.withColumn("COL_MERGE_ID", monotonically_increasing_id())
         df_2 = df_2.withColumn("COL_MERGE_ID", monotonically_increasing_id())
-        df_3 = df_2.join(df1, "COL_MERGE_ID").drop("COL_MERGE_ID")
+        df_3 = df_2.join(df_1, "COL_MERGE_ID").drop("COL_MERGE_ID")
         return df_3
 

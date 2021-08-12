@@ -46,7 +46,7 @@ class SLearner:
         data (2-D Spark dataframe): Base dataset containing features, treatment, iv, and outcome variables
         treatments (List): Names of the treatment variables             
         outcome (Str): Name of the outcome variable
-        estimator (mllib model obj): Arbitrary ML estimator of choice
+        estimator (sklearn model obj): Arbitrary ML estimator of choice
               
         Returns
         ------
@@ -91,8 +91,8 @@ class SLearner:
         # Get cate
         X_w_pred = self.__mergeDfCol(X, prediction_1)
         X_w_pred = self.__mergeDfCol(X_w_pred, prediction_0)
-        self.cate[treatment] = X_w_pred.select(X_w_pred.prediction_1 - X_w_pred.prediction_0).withColumnRenamed("(prediction_1 - prediction_0)", "cate")
-        self.average_treatment_effects[treatment] = float(self.cate[treatment].groupby().avg().head()[0])
+        cate = X_w_pred.select(X_w_pred.prediction_1 - X_w_pred.prediction_0).withColumnRenamed("(prediction_1 - prediction_0)", "cate")
+        ate = float(cate.groupby().avg().head()[0])
             
         return cate, ate
 
@@ -121,5 +121,5 @@ class SLearner:
         
         df_1 = df_1.withColumn("COL_MERGE_ID", monotonically_increasing_id())
         df_2 = df_2.withColumn("COL_MERGE_ID", monotonically_increasing_id())
-        df_3 = df_2.join(df1, "COL_MERGE_ID").drop("COL_MERGE_ID")
+        df_3 = df_2.join(df_1, "COL_MERGE_ID").drop("COL_MERGE_ID")
         return df_3
