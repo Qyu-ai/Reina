@@ -37,7 +37,7 @@ ReInA (Reasoning In AI) is a causal inference platform aimed at estimating heter
 Please refer to example notebooks for more detailed toy demonstrations.
 
 ## Contribution Guidelines
-If you wish to contribute, please refer to our [contribution guidelines](./CONTRIBUTIONS.md).
+If you wish to contribute, please refer to our [contribution guidelines](./CONTRIBUTING.md).
 
 Any contributions are greatly welcomed and appreciated.
 
