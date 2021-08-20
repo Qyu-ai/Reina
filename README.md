@@ -34,7 +34,7 @@ ReInA (Reasoning In AI) is a causal inference platform aimed at estimating heter
     print(cate)
     print(ate)
     
-Please refer to example notebooks for more detailed toy demonstrations.
+Please refer to example notebooks and [full documentation](https://qyu-ai.github.io/Reina/) for more detailed toy demonstrations.
 
 ## Contribution Guidelines
 If you wish to contribute, please refer to our [contribution guidelines](./CONTRIBUTING.md).
