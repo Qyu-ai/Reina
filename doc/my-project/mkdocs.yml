@@ -1,6 +1,7 @@
 site_name: Reina
 site_url: https://example.com/
 nav:
-    - Home: index.md
-    - About: about.md
+    - Home: home.md
+    - Methods: methods.md
+    - References: references.md
 theme: readthedocs
