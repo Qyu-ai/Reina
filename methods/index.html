@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="https://example.com/methods/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Methods - Reina</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Methods";
+    var mkdocs_page_input_path = "methods.md";
+    var mkdocs_page_url = "/methods/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Reina</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../home/">Home</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Methods</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#metalearners">Metalearners</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#s-learner">S-Learner</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#methods_1">Methods</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#t-learner">T-Learner</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#x-learner">X-Learner</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#iv-based-methods">IV-based Methods</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#two-stage-least-squares">Two-Stage Least Squares</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../references/">References</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Reina</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Methods</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="methods">Methods</h1>
+<h2 id="metalearners">Metalearners</h2>
+<h3 id="s-learner">S-Learner</h3>
+<pre><code>class reina.metalearners.SLearner
+</code></pre>
+<h4 id="methods_1">Methods</h4>
+<table>
+<thead>
+<tr>
+<th>Function Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="dummy.com"><strong>init</strong></a></td>
+<td>Initialize object.</td>
+</tr>
+<tr>
+<td><a href="dummy.com">effects</a></td>
+<td>Calculates and returns the treatment effects from this class.</td>
+</tr>
+<tr>
+<td><a href="dummy.com">fit</a></td>
+<td>Train the causal model.</td>
+</tr>
+</tbody>
+</table>
+<p><code>effects(self, X, treatment)</code></p>
+<p>Calculates and returns the treatment effects from this class.</p>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<ul>
+<li>X (<em>2D Spark Dataframe</em>): Feature data to estimate treatment effect of</li>
+<li>treatment (<em>Str</em>): Name of the treatment variable </li>
+</ul>
+</blockquote>
+<p><strong>Returns</strong></p>
+<blockquote>
+<ul>
+<li>cate (<em>2D Spark DataFrame</em>): conditional average treatment effect</li>
+<li>ate (<em>float</em>): average treatment effect</li>
+</ul>
+</blockquote>
+<p><code>fit(self, data, treatments, outcome, estimator)</code></p>
+<p>Trains the ML-based causal model for this class.</p>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<ul>
+<li>data (<em>2-D Spark dataframe</em>): Base dataset containing features, treatment, iv, and outcome variables</li>
+<li>treatments (<em>List</em>): Names of the treatment variables</li>
+<li>outcome (<em>Str</em>): Name of the outcome variable</li>
+<li>estimator (<em>sklearn model obj</em>): Arbitrary ML estimator of choice</li>
+</ul>
+</blockquote>
+<p><strong>Returns</strong></p>
+<blockquote>
+<ul>
+<li>None (<em>self</em>)</li>
+</ul>
+</blockquote>
+<p><strong>Example</strong></p>
+<p>Example S-learner usage can be found <a href="https://github.com/Qyu-ai/Reina/blob/main/examples/notebooks/metalearner/metalearner_toy.ipynb">here</a>.</p>
+<h3 id="t-learner">T-Learner</h3>
+<pre><code>class reina.metalearners.TLearner
+</code></pre>
+<p><strong>Methods</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="dummy.com"><strong>init</strong></a></td>
+<td>Initialize object.</td>
+</tr>
+<tr>
+<td><a href="dummy.com">effects</a></td>
+<td>Calculates and returns the treatment effects from this class.</td>
+</tr>
+<tr>
+<td><a href="dummy.com">fit</a></td>
+<td>Trains the causal model</td>
+</tr>
+</tbody>
+</table>
+<p><code>effects(self, X, treatment)</code></p>
+<p>Calculates and returns the treatment effects from this class.</p>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<ul>
+<li>X (<em>2D Spark Dataframe</em>): Feature data to estimate treatment effect of</li>
+<li>treatment (<em>Str</em>): Name of the treatment variable </li>
+</ul>
+</blockquote>
+<p><strong>Returns</strong></p>
+<blockquote>
+<ul>
+<li>cate (<em>2D Spark DataFrame</em>): conditional average treatment effect</li>
+<li>ate (<em>float</em>): average treatment effect</li>
+</ul>
+</blockquote>
+<p><code>fit(self,  data, treatments, outcome, estimator_0, estimator_1)</code></p>
+<p>Trains the ML-based causal model for this class.</p>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<ul>
+<li>data (<em>2-D Spark dataframe</em>): Base dataset containing features, treatment, iv, and outcome variables</li>
+<li>treatments (<em>List</em>): Names of the treatment variables</li>
+<li>outcome (<em>Str</em>): Name of the outcome variable</li>
+<li>estimator_0 (<em>mllib model obj</em>): Arbitrary ML model of choice</li>
+<li>estimator_1 (<em>mllib model obj</em>): Arbitrary ML model of choice</li>
+</ul>
+</blockquote>
+<p><strong>Returns</strong></p>
+<blockquote>
+<ul>
+<li>None (<em>self</em>)</li>
+</ul>
+</blockquote>
+<p><strong>Example</strong></p>
+<p>Example T-learner usage can be found <a href="https://github.com/Qyu-ai/Reina/blob/main/examples/notebooks/metalearner/metalearner_toy.ipynb">here</a>.</p>
+<h3 id="x-learner">X-Learner</h3>
+<pre><code>class reina.metalearners.XLearner
+</code></pre>
+<p><strong>Methods</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="dummy.com"><strong>init</strong></a></td>
+<td>Initialize object.</td>
+</tr>
+<tr>
+<td><a href="dummy.com">effects</a></td>
+<td>Calculates and returns the treatment effects from this class.</td>
+</tr>
+<tr>
+<td><a href="dummy.com">fit</a></td>
+<td>Trains the causal model.</td>
+</tr>
+</tbody>
+</table>
+<p><code>effects(self, X, treatment)</code></p>
+<p>Calculates and returns the treatment effects from this class.</p>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<ul>
+<li>X (<em>2D Spark Dataframe</em>): Feature data to estimate treatment effect of</li>
+<li>treatment (<em>Str</em>): Name of the treatment variable </li>
+</ul>
+</blockquote>
+<p><strong>Returns</strong></p>
+<blockquote>
+<ul>
+<li>cate (<em>2D Spark DataFrame</em>): conditional average treatment effect</li>
+<li>ate (<em>float</em>): average treatment effect</li>
+</ul>
+</blockquote>
+<p><code>fit(self,  data, treatments, outcome, estimator_0, estimator_1)</code></p>
+<p>Trains the ML-based causal model for this class.</p>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<ul>
+<li>data (<em>2-D Spark dataframe</em>): Base dataset containing features, treatment, iv, and outcome variables</li>
+<li>treatments (<em>List</em>): Names of the treatment variables</li>
+<li>outcome (<em>Str</em>): Name of the outcome variable</li>
+<li>estimator_10 (<em>mllib model obj</em>): Arbitrary ML model of choice</li>
+<li>estimator_11 (<em>mllib model obj</em>): Arbitrary ML model of choice</li>
+<li>estimator_20 (<em>mllib model obj</em>): Arbitrary ML model of choice</li>
+<li>estimator_21 (<em>mllib model obj</em>): Arbitrary ML model of choice</li>
+<li>propensity_estimator (<em>mllib model obj</em>): Arbitrary ML model for propensity function</li>
+</ul>
+</blockquote>
+<p><strong>Returns</strong></p>
+<blockquote>
+<ul>
+<li>None (<em>self</em>)</li>
+</ul>
+</blockquote>
+<p><strong>Example</strong></p>
+<p>Example X-learner usage can be found <a href="https://github.com/Qyu-ai/Reina/blob/main/examples/notebooks/metalearner/metalearner_toy.ipynb">here</a>.</p>
+<h2 id="iv-based-methods">IV-based Methods</h2>
+<h3 id="two-stage-least-squares">Two-Stage Least Squares</h3>
+<pre><code>class reina.iv.TwoStageLeastSquares
+</code></pre>
+<p><strong>Methods</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="dummy.com"><strong>init</strong></a></td>
+<td>Initialize object.</td>
+</tr>
+<tr>
+<td><a href="dummy.com">effects</a></td>
+<td>Calculates and returns the treatment effects from this class.</td>
+</tr>
+<tr>
+<td><a href="dummy.com">fit</a></td>
+<td>Trains the causal model.</td>
+</tr>
+</tbody>
+</table>
+<p><code>effects(self, X, treatment)</code></p>
+<p>Calculates and returns the treatment effects from this class.</p>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<ul>
+<li>X (<em>2D Spark Dataframe</em>): Feature data to estimate treatment effect of</li>
+<li>treatment (<em>Str</em>): Name of the treatment variable </li>
+</ul>
+</blockquote>
+<p><strong>Returns</strong></p>
+<blockquote>
+<ul>
+<li>cate (<em>2D Spark DataFrame</em>): conditional average treatment effect</li>
+<li>ate (<em>float</em>): average treatment effect</li>
+</ul>
+</blockquote>
+<p><code>fit(self, data, data, treatments, outcome, iv)</code></p>
+<p>Trains the ML-based causal model for this class.</p>
+<p><strong>Parameters</strong></p>
+<blockquote>
+<ul>
+<li>data (<em>2-D Spark dataframe</em>): Base dataset containing features, treatment, iv, and outcome variables</li>
+<li>treatments (<em>List</em>): Names of the treatment variables</li>
+<li>outcome (<em>Str</em>): Name of the outcome variable</li>
+<li>iv (<em>Str</em>): Name of the instrument variable</li>
+</ul>
+</blockquote>
+<p><strong>Returns</strong></p>
+<blockquote>
+<ul>
+<li>None (<em>self</em>)</li>
+</ul>
+</blockquote>
+<p><strong>Example</strong></p>
+<p>Example TwoStageLeastSquares usage can be found <a href="https://github.com/Qyu-ai/Reina/blob/main/examples/notebooks/tsls/tsls_toy.ipynb">here</a>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../references/" class="btn btn-neutral float-right" title="References">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../home/" class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../home/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../references/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
